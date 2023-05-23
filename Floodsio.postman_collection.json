@@ -1,0 +1,550 @@
+{
+	"info": {
+		"_postman_id": "75b0bd38-464a-4383-b45a-ba28c25276da",
+		"name": "Floodsio",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "26270903"
+	},
+	"item": [
+		{
+			"name": "Donor",
+			"item": [
+				{
+					"name": "Sign Up Donor",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email_address\":\"abc@abc.com\",\r\n    \"password\":\"1234567890\",\r\n    \"full_name\":\"zainab\",\r\n    \"gender\":\"female\",\r\n    \"phone_no\":\"030896398732r\",\r\n    \"cnic\":\"873976908387983732\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:4000/api/donor/sign-up",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"donor",
+								"sign-up"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Sign In Donor",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email_address\":\"abc@abc.com\",\r\n    \"password\":\"123456789\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:4000/api/donor/sign-in",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"donor",
+								"sign-in"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Donor By Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:4000/api/donor/get-donor/646be7afdf6fc9e111f73285",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"donor",
+								"get-donor",
+								"646be7afdf6fc9e111f73285"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Donor By Id",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:4000/api/donor/delete-donor/646bf2099b912ef9496198b5",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"donor",
+								"delete-donor",
+								"646bf2099b912ef9496198b5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Donor By Id",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email_address\":\"xyz@abc.com\",\r\n    \"full_name\":\"zainab 2\",\r\n    \"gender\":\"female 2\",\r\n    \"phone_no\":\"030896398732r 2\",\r\n    \"cnic\":\"873976908387983732 2\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:4000/api/donor/update-donor/646bf2099b912ef9496198b5",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"donor",
+								"update-donor",
+								"646bf2099b912ef9496198b5"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Vendor",
+			"item": [
+				{
+					"name": "Sign Up Vendor",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email_address\":\"abc@abc.com\",\r\n    \"password\":\"1234567890\",\r\n    \"full_name\":\"zainab\",\r\n    \"gender\":\"female\",\r\n    \"phone_no\":\"030896398732r\",\r\n    \"cnic\":\"873976908387983732\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:4000/api/vendor/sign-up",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"vendor",
+								"sign-up"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Sign In Vendor",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email_address\":\"abc@abc.com\",\r\n    \"password\":\"1234567890\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:4000/api/vendor/sign-in",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"vendor",
+								"sign-in"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Vendor By Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:4000/api/vendor/get-vendor/646cad76075049cfd9b6b1aa",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"vendor",
+								"get-vendor",
+								"646cad76075049cfd9b6b1aa"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Vendor By Id",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:4000/api/vendor/delete-vendor/646cad76075049cfd9b6b1aa",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"vendor",
+								"delete-vendor",
+								"646cad76075049cfd9b6b1aa"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Vendor By Id",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email_address\":\"xyz@abc.com\",\r\n    \"full_name\":\"zainab 2\",\r\n    \"gender\":\"female 2\",\r\n    \"phone_no\":\"030896398732r 2\",\r\n    \"cnic\":\"873976908387983732 2\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:4000/api/vendor/update-vendor/646bf2099b912ef9496198b5",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"vendor",
+								"update-vendor",
+								"646bf2099b912ef9496198b5"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Rider",
+			"item": [
+				{
+					"name": "Sign Up Rider",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email_address\":\"abc@abc.com\",\r\n    \"password\":\"1234567890\",\r\n    \"full_name\":\"zainab\",\r\n    \"gender\":\"female\",\r\n    \"phone_no\":\"030896398732r\",\r\n    \"cnic\":\"873976908387983732\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:4000/api/rider/sign-up",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"rider",
+								"sign-up"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Sign In Rider",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email_address\":\"abc@abc.com\",\r\n    \"password\":\"1234567890\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:4000/api/rider/sign-in",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"rider",
+								"sign-in"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Rider By Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:4000/api/rider/get-rider/646cad76075049cfd9b6b1aa",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"rider",
+								"get-rider",
+								"646cad76075049cfd9b6b1aa"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Rider By Id",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:4000/api/rider/delete-rider/646cb3be05286df1e0f20550",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"rider",
+								"delete-rider",
+								"646cb3be05286df1e0f20550"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Rider By Id",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email_address\":\"xyz@abc.com\",\r\n    \"full_name\":\"zainab 2\",\r\n    \"gender\":\"female 2\",\r\n    \"phone_no\":\"030896398732r 2\",\r\n    \"cnic\":\"873976908387983732 2\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:4000/api/rider/update-rider/646bf2099b912ef9496198b5",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"rider",
+								"update-rider",
+								"646bf2099b912ef9496198b5"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Admin",
+			"item": [
+				{
+					"name": "Sign Up Admin",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email_address\":\"abc@abc.com\",\r\n    \"password\":\"1234567890\",\r\n    \"full_name\":\"zainab\",\r\n    \"gender\":\"female\",\r\n    \"phone_no\":\"030896398732r\",\r\n    \"cnic\":\"873976908387983732\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:4000/api/admin/sign-up",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"admin",
+								"sign-up"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Sign In Admin",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email_address\":\"abc@abc.com\",\r\n    \"password\":\"1234567890\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:4000/api/admin/sign-in",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"admin",
+								"sign-in"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Admin By Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:4000/api/admin/get-admin/646cad76075049cfd9b6b1aa",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"admin",
+								"get-admin",
+								"646cad76075049cfd9b6b1aa"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Admin By Id",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:4000/api/admin/delete-admin/646d3496dc49b007c04328f3",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"admin",
+								"delete-admin",
+								"646d3496dc49b007c04328f3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Admin By Id",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email_address\":\"xyz@abc.com\",\r\n    \"full_name\":\"zainab 2\",\r\n    \"gender\":\"female 2\",\r\n    \"phone_no\":\"030896398732r 2\",\r\n    \"cnic\":\"873976908387983732 2\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:4000/api/admin/update-admin/646bf2099b912ef9496198b5",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"admin",
+								"update-admin",
+								"646bf2099b912ef9496198b5"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
