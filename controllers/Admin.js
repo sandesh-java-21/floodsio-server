@@ -1,6 +1,8 @@
 const Admin = require("../models/Admin");
 const bcrypt = require("bcryptjs");
 
+const { uploadImageToCloudinary } = require("../utils/Cloudinary");
+
 const login = async (req, res) => {
   var { email_address, password } = req.body;
   bcrypt.genSalt(10, function (err, salt) {
@@ -278,10 +280,94 @@ const updateAdminById = async (req, res) => {
   }
 };
 
+const uploadProfilePicture = async (req, res) => {
+  try {
+    var admin_id = req.params.admin_id;
+
+    var { imageBase64 } = req.body;
+
+    if (!admin_id || admin_id === "") {
+      res.json({
+        message: "Required fields are empty",
+        status: "400",
+      });
+    } else {
+      var admin = await Admin.findById(admin_id)
+        .then(async (onAdminFound) => {
+          console.log("on admin found: ", onAdminFound);
+
+          uploadImageToCloudinary(imageBase64)
+            .then(async (onImageUpload) => {
+              console.log("on image upload: ", onImageUpload);
+
+              var filter = {
+                _id: onAdminFound._id,
+              };
+
+              var updatedData = {
+                profile_picture: {
+                  url: onImageUpload.secure_url,
+                  public_id: onImageUpload.public_id,
+                },
+              };
+
+              var updatedAdmin = await Admin.findByIdAndUpdate(
+                filter,
+                updatedData,
+                {
+                  new: true,
+                }
+              )
+                .then(async (onAdminUpdate) => {
+                  console.log("on admin update: ", onAdminUpdate);
+                  res.json({
+                    message: "Admin profile picture uploaded!",
+                    status: "200",
+                    updatedAdmin: onAdminUpdate,
+                    profile_image: onAdminUpdate.profile_picture.url,
+                  });
+                })
+                .catch(async (onAdminUpdateError) => {
+                  console.log("on admin update error: ", onAdminUpdateError);
+                  res.json({
+                    message:
+                      "Something went wrong while updating profile picture!",
+                    status: "400",
+                    error: onAdminUpdateError,
+                  });
+                });
+            })
+            .catch(async (onImageUploadError) => {
+              console.log("on image upload error: ", onImageUploadError);
+              res.json({
+                message: "Something went wrong while uploading image to cloud!",
+                status: "400",
+                error: onImageUploadError,
+              });
+            });
+        })
+        .catch(async (onAdminFoundError) => {
+          console.log("on admin found error: ", onAdminFoundError);
+          res.json({
+            message: "Admin not found!",
+            status: "404",
+          });
+        });
+    }
+  } catch (error) {
+    res.json({
+      status: "500",
+      message: "Internal Server Error",
+      error,
+    });
+  }
+};
+
 module.exports = {
   login,
   signUp,
   getAdminById,
   deleteAdminById,
   updateAdminById,
+  uploadProfilePicture,
 };

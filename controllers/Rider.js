@@ -1,6 +1,8 @@
 const Rider = require("../models/Rider");
 const bcrypt = require("bcryptjs");
 
+const { uploadImageToCloudinary } = require("../utils/Cloudinary");
+
 const login = async (req, res) => {
   var { email_address, password } = req.body;
   bcrypt.genSalt(10, function (err, salt) {
@@ -278,10 +280,94 @@ const updateRiderById = async (req, res) => {
   }
 };
 
+const uploadProfilePicture = async (req, res) => {
+  try {
+    var rider_id = req.params.rider_id;
+
+    var { imageBase64 } = req.body;
+
+    if (!rider_id || rider_id === "") {
+      res.json({
+        message: "Required fields are empty",
+        status: "400",
+      });
+    } else {
+      var rider = await Rider.findById(rider_id)
+        .then(async (onRiderFound) => {
+          console.log("on rider found: ", onRiderFound);
+
+          uploadImageToCloudinary(imageBase64)
+            .then(async (onImageUpload) => {
+              console.log("on image upload: ", onImageUpload);
+
+              var filter = {
+                _id: onRiderFound._id,
+              };
+
+              var updatedData = {
+                profile_picture: {
+                  url: onImageUpload.secure_url,
+                  public_id: onImageUpload.public_id,
+                },
+              };
+
+              var updatedRider = await Rider.findByIdAndUpdate(
+                filter,
+                updatedData,
+                {
+                  new: true,
+                }
+              )
+                .then(async (onRiderUpdate) => {
+                  console.log("on rider update: ", onRiderUpdate);
+                  res.json({
+                    message: "Rider profile picture uploaded!",
+                    status: "200",
+                    updatedRider: onRiderUpdate,
+                    profile_image: onRiderUpdate.profile_picture.url,
+                  });
+                })
+                .catch(async (onRiderUpdateError) => {
+                  console.log("on rider update error: ", onRiderUpdateError);
+                  res.json({
+                    message:
+                      "Something went wrong while updating profile picture!",
+                    status: "400",
+                    error: onRiderUpdateError,
+                  });
+                });
+            })
+            .catch(async (onImageUploadError) => {
+              console.log("on image upload error: ", onImageUploadError);
+              res.json({
+                message: "Something went wrong while uploading image to cloud!",
+                status: "400",
+                error: onImageUploadError,
+              });
+            });
+        })
+        .catch(async (onRiderFoundError) => {
+          console.log("on rider found error: ", onRiderFoundError);
+          res.json({
+            message: "Rider not found!",
+            status: "404",
+          });
+        });
+    }
+  } catch (error) {
+    res.json({
+      status: "500",
+      message: "Internal Server Error",
+      error,
+    });
+  }
+};
+
 module.exports = {
   login,
   signUp,
   getRiderById,
   updateRiderById,
   deleteRiderById,
+  uploadProfilePicture,
 };

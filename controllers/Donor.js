@@ -1,6 +1,8 @@
 const Donor = require("../models/Donor");
 const bcrypt = require("bcryptjs");
 
+const { uploadImageToCloudinary } = require("../utils/Cloudinary");
+
 const login = async (req, res) => {
   var { email_address, password } = req.body;
   bcrypt.genSalt(10, function (err, salt) {
@@ -278,10 +280,94 @@ const updateDonorById = async (req, res) => {
   }
 };
 
+const uploadProfilePicture = async (req, res) => {
+  try {
+    var donor_id = req.params.donor_id;
+
+    var { imageBase64 } = req.body;
+
+    if (!donor_id || donor_id === "") {
+      res.json({
+        message: "Required fields are empty",
+        status: "400",
+      });
+    } else {
+      var donor = await Donor.findById(donor_id)
+        .then(async (onDonorFound) => {
+          console.log("on donor found: ", onDonorFound);
+
+          uploadImageToCloudinary(imageBase64)
+            .then(async (onImageUpload) => {
+              console.log("on image upload: ", onImageUpload);
+
+              var filter = {
+                _id: onDonorFound._id,
+              };
+
+              var updatedData = {
+                profile_picture: {
+                  url: onImageUpload.secure_url,
+                  public_id: onImageUpload.public_id,
+                },
+              };
+
+              var updatedDonor = await Donor.findByIdAndUpdate(
+                filter,
+                updatedData,
+                {
+                  new: true,
+                }
+              )
+                .then(async (onDonorUpdate) => {
+                  console.log("on donor update: ", onDonorUpdate);
+                  res.json({
+                    message: "Donor profile picture uploaded!",
+                    status: "200",
+                    updatedDonor: onDonorUpdate,
+                    profile_image: onDonorUpdate.profile_picture.url,
+                  });
+                })
+                .catch(async (onDonorUpdateError) => {
+                  console.log("on donor update error: ", onDonorUpdateError);
+                  res.json({
+                    message:
+                      "Something went wrong while updating profile picture!",
+                    status: "400",
+                    error: onDonorUpdateError,
+                  });
+                });
+            })
+            .catch(async (onImageUploadError) => {
+              console.log("on image upload error: ", onImageUploadError);
+              res.json({
+                message: "Something went wrong while uploading image to cloud!",
+                status: "400",
+                error: onImageUploadError,
+              });
+            });
+        })
+        .catch(async (onDonorFoundError) => {
+          console.log("on donor found error: ", onDonorFoundError);
+          res.json({
+            message: "Donor not found!",
+            status: "404",
+          });
+        });
+    }
+  } catch (error) {
+    res.json({
+      status: "500",
+      message: "Internal Server Error",
+      error,
+    });
+  }
+};
+
 module.exports = {
   login,
   signUp,
   getDonorById,
   deleteDonorById,
   updateDonorById,
+  uploadProfilePicture,
 };

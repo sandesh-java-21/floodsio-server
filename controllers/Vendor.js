@@ -1,5 +1,6 @@
 const Vendor = require("../models/Vendor");
 const bcrypt = require("bcryptjs");
+const { uploadImageToCloudinary } = require("../utils/Cloudinary");
 
 const login = async (req, res) => {
   var { email_address, password } = req.body;
@@ -278,10 +279,94 @@ const updateVendorById = async (req, res) => {
   }
 };
 
+const uploadProfilePicture = async (req, res) => {
+  try {
+    var vendor_id = req.params.vendor_id;
+
+    var { imageBase64 } = req.body;
+
+    if (!vendor_id || vendor_id === "") {
+      res.json({
+        message: "Required fields are empty",
+        status: "400",
+      });
+    } else {
+      var vendor = await Vendor.findById(vendor_id)
+        .then(async (onVendorFound) => {
+          console.log("on vendor found: ", onVendorFound);
+
+          uploadImageToCloudinary(imageBase64)
+            .then(async (onImageUpload) => {
+              console.log("on image upload: ", onImageUpload);
+
+              var filter = {
+                _id: onVendorFound._id,
+              };
+
+              var updatedData = {
+                profile_picture: {
+                  url: onImageUpload.secure_url,
+                  public_id: onImageUpload.public_id,
+                },
+              };
+
+              var updatedVendor = await Vendor.findByIdAndUpdate(
+                filter,
+                updatedData,
+                {
+                  new: true,
+                }
+              )
+                .then(async (onVendorUpdate) => {
+                  console.log("on vendor update: ", onVendorUpdate);
+                  res.json({
+                    message: "Vendor profile picture uploaded!",
+                    status: "200",
+                    updatedVendor: onVendorUpdate,
+                    profile_image: onVendorUpdate.profile_picture.url,
+                  });
+                })
+                .catch(async (onVendorUpdateError) => {
+                  console.log("on vendor update error: ", onVendorUpdateError);
+                  res.json({
+                    message:
+                      "Something went wrong while updating profile picture!",
+                    status: "400",
+                    error: onVendorUpdateError,
+                  });
+                });
+            })
+            .catch(async (onImageUploadError) => {
+              console.log("on image upload error: ", onImageUploadError);
+              res.json({
+                message: "Something went wrong while uploading image to cloud!",
+                status: "400",
+                error: onImageUploadError,
+              });
+            });
+        })
+        .catch(async (onVendorFoundError) => {
+          console.log("on vendor found error: ", onVendorFoundError);
+          res.json({
+            message: "Vendor not found!",
+            status: "404",
+          });
+        });
+    }
+  } catch (error) {
+    res.json({
+      status: "500",
+      message: "Internal Server Error",
+      error,
+    });
+  }
+};
+
 module.exports = {
   login,
   signUp,
   getVendorById,
   deleteVendorById,
   updateVendorById,
+  uploadProfilePicture,
 };
