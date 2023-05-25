@@ -3,7 +3,6 @@ const { cloudConfig } = require("../Config");
 
 function uploadImageToCloudinary(base64Image) {
   cloudinary.config(cloudConfig);
-  console.log("image base 64: ", base64Image);
 
   return new Promise((resolve, reject) => {
     // Upload the image to Cloudinary
