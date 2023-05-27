@@ -7,6 +7,7 @@ const riderRoutes = require("../routes/Rider");
 const adminRoutes = require("../routes/Admin");
 const itemRoutes = require("../routes/Item");
 const categoryRoutes = require("../routes/Category");
+const victimRoutes = require("../routes/Victim");
 
 router.use("/donor", donorRoutes);
 router.use("/vendor", vendorRoutes);
@@ -14,5 +15,6 @@ router.use("/rider", riderRoutes);
 router.use("/admin", adminRoutes);
 router.use("/item", itemRoutes);
 router.use("/category", categoryRoutes);
+router.use("/victim", victimRoutes);
 
 module.exports = router;
