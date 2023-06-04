@@ -8,6 +8,7 @@ const {
   getRiderById,
   updateRiderById,
   uploadProfilePicture,
+  getAllRiders,
 } = require("../controllers/Rider");
 
 router.post("/sign-up", signUp);
@@ -15,6 +16,8 @@ router.post("/sign-up", signUp);
 router.post("/sign-in", login);
 
 router.get("/get-rider/:rider_id", getRiderById);
+
+router.get("/get-all-riders", getAllRiders);
 
 router.delete("/delete-rider/:rider_id", deleteRiderById);
 

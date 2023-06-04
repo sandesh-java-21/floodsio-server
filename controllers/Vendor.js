@@ -362,6 +362,41 @@ const uploadProfilePicture = async (req, res) => {
   }
 };
 
+const getAllVendors = async (req, res) => {
+  try {
+    var vendors = await Vendor.find(
+      {},
+      {
+        password: 0,
+      }
+    )
+      .populate("items")
+      .then((onVendorsFound) => {
+        console.log("on vendors found: ", onVendorsFound);
+        res.json({
+          message:
+            onVendorsFound.length > 0 ? "Vendors found!" : "No vendors found!",
+          status: "200",
+          allVendors: onVendorsFound,
+        });
+      })
+      .catch((onVendorsFoundError) => {
+        console.log("on vendors found error: ", onVendorsFoundError);
+        res.json({
+          message: "Something went wrong while getting all vendors!",
+          status: "400",
+          error: onVendorsFoundError,
+        });
+      });
+  } catch (error) {
+    res.json({
+      status: "500",
+      message: "Internal Server Error",
+      error,
+    });
+  }
+};
+
 module.exports = {
   login,
   signUp,
@@ -369,4 +404,5 @@ module.exports = {
   deleteVendorById,
   updateVendorById,
   uploadProfilePicture,
+  getAllVendors,
 };

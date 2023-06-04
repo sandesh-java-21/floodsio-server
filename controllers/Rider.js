@@ -363,6 +363,40 @@ const uploadProfilePicture = async (req, res) => {
   }
 };
 
+const getAllRiders = async (req, res) => {
+  try {
+    var riders = await Rider.find(
+      {},
+      {
+        password: 0,
+      }
+    )
+      .then((onRidersFound) => {
+        console.log("on riders found: ", onRidersFound);
+        res.json({
+          message:
+            onRidersFound.length > 0 ? "Riders found!" : "No riders found!",
+          status: "200",
+          allRiders: onRidersFound,
+        });
+      })
+      .catch((onRidersFoundError) => {
+        console.log("on riders found error: ", onRidersFoundError);
+        res.json({
+          message: "Something went wrong while getting all riders!",
+          status: "400",
+          error: onRidersFoundError,
+        });
+      });
+  } catch (error) {
+    res.json({
+      status: "500",
+      message: "Internal Server Error",
+      error,
+    });
+  }
+};
+
 module.exports = {
   login,
   signUp,
@@ -370,4 +404,5 @@ module.exports = {
   updateRiderById,
   deleteRiderById,
   uploadProfilePicture,
+  getAllRiders,
 };

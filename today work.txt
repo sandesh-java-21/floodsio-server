@@ -1,0 +1,16 @@
+1. Add item to necessities
+2. remove item from necessities
+3. get all necessary items
+4. get all vendors with its populated items
+5. get all donors
+6. get all riders
+7. check donor email
+8. send forgot password otp email
+9. verify forgot password otp email
+10. update donor password
+11. check admin email
+12. check rider email
+13. check vendor email
+14. update vendor password
+15. update admin password
+16. update rider password

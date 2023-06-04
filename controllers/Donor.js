@@ -1,7 +1,9 @@
 const Donor = require("../models/Donor");
 const bcrypt = require("bcryptjs");
+const Item = require("../models/Item");
 
 const { uploadImageToCloudinary } = require("../utils/Cloudinary");
+const { isVendorIdAvailable } = require("../utils/Basic");
 
 const login = async (req, res) => {
   var { email_address, password } = req.body;
@@ -363,6 +365,237 @@ const uploadProfilePicture = async (req, res) => {
   }
 };
 
+const getAllDonors = async (req, res) => {
+  try {
+    var donors = await Donor.find(
+      {},
+      {
+        password: 0,
+      }
+    )
+      .then((onDonorsFound) => {
+        console.log("on donors found: ", onDonorsFound);
+        res.json({
+          message:
+            onDonorsFound.length > 0 ? "Donors found!" : "No donors found!",
+          status: "200",
+          allDonors: onDonorsFound,
+        });
+      })
+      .catch((onDonorsFoundError) => {
+        console.log("on donors found error: ", onDonorsFoundError);
+        res.json({
+          message: "Something went wrong while getting all donors!",
+          status: "400",
+          error: onDonorsFoundError,
+        });
+      });
+  } catch (error) {
+    res.json({
+      status: "500",
+      message: "Internal Server Error",
+      error,
+    });
+  }
+};
+
+const addItemToDonorCart = async (req, res) => {
+  try {
+    var { item_id, quantity, donor_id } = req.body;
+    console.log("donor id: ", donor_id);
+
+    if (!donor_id || donor_id === "") {
+      res.json({
+        message: "Required fields are empty!",
+        status: "400",
+      });
+    } else {
+      var donor = await Donor.findById(donor_id)
+        .then(async (onDonorFound) => {
+          console.log("on donor found: ", onDonorFound);
+
+          var donorCart = onDonorFound.cart;
+
+          var item = await Item.findById(item_id)
+            .then(async (onItemFound) => {
+              console.log("on item found: ", onItemFound);
+
+              var conflictFound = isVendorIdAvailable(
+                donorCart,
+                onItemFound.vendor
+              );
+
+              console.log("conflict found: ", conflictFound);
+
+              if (conflictFound) {
+                res.json({
+                  message: "Can not add items from multiple vendors!",
+                  status: "400",
+                });
+              } else {
+                donorCart.push({
+                  item: item_id,
+                  quantity,
+                  vendor: onItemFound.vendor,
+                });
+
+                await onDonorFound.save();
+
+                var filter = {
+                  _id: onItemFound._id,
+                };
+
+                var updatedData = {
+                  quantity: onItemFound.quantity - 1,
+                };
+
+                var updatedItem = await Item.findByIdAndUpdate(
+                  filter,
+                  updatedData,
+                  {
+                    new: true,
+                  }
+                )
+                  .then((onItemUpdate) => {
+                    console.log("on item update: ", onItemUpdate);
+                    res.json({
+                      message: "Item added to the cart!",
+                      status: "200",
+                    });
+                  })
+                  .catch((onItemUpdateError) => {
+                    console.log("on item update error: ", onItemUpdateError);
+                    res.json({
+                      message:
+                        "Something went wrong while adding item to the cart!",
+                      status: "400",
+                      error: onItemUpdateError,
+                    });
+                  });
+              }
+            })
+            .catch((onItemFoundError) => {
+              console.log("on item found error: ", onItemFoundError);
+              res.json({
+                message: "Item not found!",
+                status: "404",
+                error: onItemFoundError,
+              });
+            });
+        })
+        .catch((onDonorFoundError) => {
+          console.log("on donor found error: ", onDonorFoundError);
+          res.json({
+            message: "Donor not found!",
+            status: "404",
+            error: onDonorFoundError,
+          });
+        });
+    }
+  } catch (error) {
+    res.json({
+      status: "500",
+      message: "Internal Server Error",
+      error,
+    });
+  }
+};
+
+const removeItemFromDonorCart = async (req, res) => {
+  try {
+    var { item_id, donor_id } = req.body;
+    console.log("donor id: ", donor_id);
+
+    if (!donor_id || donor_id === "") {
+      res.json({
+        message: "Required fields are empty!",
+        status: "400",
+      });
+    } else {
+      var donor = await Donor.findById(donor_id)
+        .then(async (onDonorFound) => {
+          console.log("on donor found: ", onDonorFound);
+
+          var donorCart = onDonorFound.cart;
+
+          var itemIndex = donorCart.findIndex(
+            (item) => item.item.toString() === item_id
+          );
+
+          if (itemIndex === -1) {
+            res.json({
+              message: "Item not found in the cart!",
+              status: "404",
+            });
+          } else {
+            var item = await Item.findById(item_id)
+              .then(async (onItemFound) => {
+                console.log("on item found: ", onItemFound);
+
+                donorCart.splice(itemIndex, 1);
+
+                await onDonorFound.save();
+
+                var filter = {
+                  _id: onItemFound._id,
+                };
+
+                var updatedData = {
+                  quantity: onItemFound.quantity + 1,
+                };
+
+                var updatedItem = await Item.findByIdAndUpdate(
+                  filter,
+                  updatedData,
+                  {
+                    new: true,
+                  }
+                )
+                  .then((onItemUpdate) => {
+                    console.log("on item update: ", onItemUpdate);
+                    res.json({
+                      message: "Item removed from the cart!",
+                      status: "200",
+                    });
+                  })
+                  .catch((onItemUpdateError) => {
+                    console.log("on item update error: ", onItemUpdateError);
+                    res.json({
+                      message:
+                        "Something went wrong while removing item from the cart!",
+                      status: "400",
+                      error: onItemUpdateError,
+                    });
+                  });
+              })
+              .catch((onItemFoundError) => {
+                console.log("on item found error: ", onItemFoundError);
+                res.json({
+                  message: "Item not found!",
+                  status: "404",
+                  error: onItemFoundError,
+                });
+              });
+          }
+        })
+        .catch((onDonorFoundError) => {
+          console.log("on donor found error: ", onDonorFoundError);
+          res.json({
+            message: "Donor not found!",
+            status: "404",
+            error: onDonorFoundError,
+          });
+        });
+    }
+  } catch (error) {
+    res.json({
+      status: "500",
+      message: "Internal Server Error",
+      error,
+    });
+  }
+};
+
 module.exports = {
   login,
   signUp,
@@ -370,4 +603,7 @@ module.exports = {
   deleteDonorById,
   updateDonorById,
   uploadProfilePicture,
+  getAllDonors,
+  addItemToDonorCart,
+  removeItemFromDonorCart,
 };

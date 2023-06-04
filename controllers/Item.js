@@ -259,6 +259,133 @@ const getItemsByCategory = async (req, res) => {
   }
 };
 
+const addItemToNecessities = async (req, res) => {
+  try {
+    var item_id = req.params.item_id;
+
+    if (!item_id || item_id === "") {
+      res.json({
+        message: "Required fields are empty!",
+        status: "400",
+      });
+    } else {
+      var filter = {
+        _id: item_id,
+      };
+
+      var updatedData = {
+        is_in_need: true,
+      };
+
+      var updatedItem = await Item.findByIdAndUpdate(filter, updatedData, {
+        new: true,
+      })
+        .then((onItemUpdate) => {
+          console.log("on item update: ", onItemUpdate);
+
+          res.json({
+            message: "Item added to necessities!",
+            status: "200",
+            updatedItem: onItemUpdate,
+          });
+        })
+        .catch((onItemUpdateError) => {
+          console.log("on item update error: ", onItemUpdateError);
+          res.json({
+            message: "Something went wrong while adding item to necessities!",
+            status: "400",
+            error: onItemUpdateError,
+          });
+        });
+    }
+  } catch (error) {
+    res.json({
+      message: "Internal server error!",
+      status: "500",
+      error,
+    });
+  }
+};
+
+const removeItemFromNecessities = async (req, res) => {
+  try {
+    var item_id = req.params.item_id;
+
+    if (!item_id || item_id === "") {
+      res.json({
+        message: "Required fields are empty!",
+        status: "400",
+      });
+    } else {
+      var filter = {
+        _id: item_id,
+      };
+
+      var updatedData = {
+        is_in_need: false,
+      };
+
+      var updatedItem = await Item.findByIdAndUpdate(filter, updatedData, {
+        new: true,
+      })
+        .then((onItemUpdate) => {
+          console.log("on item update: ", onItemUpdate);
+
+          res.json({
+            message: "Item added to necessities!",
+            status: "200",
+            updatedItem: onItemUpdate,
+          });
+        })
+        .catch((onItemUpdateError) => {
+          console.log("on item update error: ", onItemUpdateError);
+          res.json({
+            message: "Something went wrong while adding item to necessities!",
+            status: "400",
+            error: onItemUpdateError,
+          });
+        });
+    }
+  } catch (error) {
+    res.json({
+      message: "Internal server error!",
+      status: "500",
+      error,
+    });
+  }
+};
+
+const getAllNecessaryItems = async (req, res) => {
+  try {
+    var items = await Item.find({
+      is_in_need: true,
+    })
+      .populate(["vendor", "category"])
+      .then((onItemsFound) => {
+        console.log("on items found: ", onItemsFound);
+        res.json({
+          message: "Items found!",
+          status: "200",
+          allItems: onItemsFound,
+        });
+      })
+      .catch((onItemsFoundError) => {
+        console.log("on items found error: ", onItemsFoundError);
+        res.json({
+          message: "Something went wrong while getting all items!",
+          status: "400",
+          error: onItemsFoundError,
+        });
+      });
+  } catch (error) {
+    res.json({
+      message: "Internal server error!",
+      status: "500",
+      error,
+    });
+  }
+};
+
 module.exports = {
   createItem,
   getAllItems,
@@ -266,4 +393,7 @@ module.exports = {
   deleteItemById,
   getItemsByVendorId,
   getItemsByCategory,
+  addItemToNecessities,
+  removeItemFromNecessities,
+  getAllNecessaryItems,
 };

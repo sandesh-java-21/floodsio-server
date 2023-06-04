@@ -43,9 +43,30 @@ const donorSchema = new mongoose.Schema({
     {
       item: { type: mongoose.Schema.Types.ObjectId, ref: "Item" },
       quantity: { type: Number, default: 1 },
+      vendor: { type: mongoose.Schema.Types.ObjectId, ref: "Vendor" },
     },
   ],
 });
+
+// Function to check if an item with a different vendor already exists in the cart
+donorSchema.methods.itemExistsWithDifferentVendor = function (
+  itemId,
+  vendorId
+) {
+  return this.cart.some((cartItem) => {
+    return cartItem.item.equals(itemId) && !cartItem.vendor.equals(vendorId);
+  });
+};
+
+// Add item to cart with vendor validation
+donorSchema.methods.addToCart = function (itemId, quantity, vendorId) {
+  if (this.itemExistsWithDifferentVendor(itemId, vendorId)) {
+    return "Cannot add items from multiple vendors to the cart.";
+  }
+
+  this.cart.push({ item: itemId, quantity, vendor: vendorId });
+  return "Item added to cart successfully.";
+};
 
 const Donor = mongoose.model("Donor", donorSchema);
 

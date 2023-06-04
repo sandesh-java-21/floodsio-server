@@ -8,6 +8,7 @@ const adminRoutes = require("../routes/Admin");
 const itemRoutes = require("../routes/Item");
 const categoryRoutes = require("../routes/Category");
 const victimRoutes = require("../routes/Victim");
+const forgotPasswordRoutes = require("../routes/ForgotPassword");
 
 router.use("/donor", donorRoutes);
 router.use("/vendor", vendorRoutes);
@@ -16,5 +17,6 @@ router.use("/admin", adminRoutes);
 router.use("/item", itemRoutes);
 router.use("/category", categoryRoutes);
 router.use("/victim", victimRoutes);
+router.use("/forgot-password", forgotPasswordRoutes);
 
 module.exports = router;

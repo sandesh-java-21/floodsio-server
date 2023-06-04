@@ -45,7 +45,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email_address\":\"abc@abc.com\",\r\n    \"password\":\"123456789\"\r\n}",
+							"raw": "{\r\n    \"email_address\":\"xyz@abc.com\",\r\n    \"password\":\"123456789\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -164,6 +164,84 @@
 								"donor",
 								"upload-profile-picture",
 								"646bf2099b912ef9496198b5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all donors",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:4000/api/donor/get-all-donors",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"donor",
+								"get-all-donors"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add item to my cart",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"donor_id\":\"646bf2099b912ef9496198b5\",\r\n    \"item_id\":\"647bcd18750f72d04a3f06d2\",\r\n    \"quantity\":1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:4000/api/donor/add-item-to-cart",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"donor",
+								"add-item-to-cart"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove item from cart",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"item_id\":\"647bcd18750f72d04a3f06d2\",\r\n    \"donor_id\":\"646bf2099b912ef9496198b5\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:4000/api/donor/remove-item-from-cart",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"donor",
+								"remove-item-from-cart"
 							]
 						}
 					},
@@ -333,6 +411,26 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Get All Vendors",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:4000/api/vendor/get-all-vendors",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"vendor",
+								"get-all-vendors"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -494,6 +592,26 @@
 								"rider",
 								"upload-profile-picture",
 								"646e13a393fb12c0cc207163"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all riders",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:4000/api/rider/get-all-riders",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"rider",
+								"get-all-riders"
 							]
 						}
 					},
@@ -801,6 +919,68 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Add item to necessities",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "localhost:4000/api/item/add-item-to-necessities/646f9f3f8e284be4c936775b",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"item",
+								"add-item-to-necessities",
+								"646f9f3f8e284be4c936775b"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove item from necessities",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "localhost:4000/api/item/remove-item-from-necessities/646f9f3f8e284be4c936775b",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"item",
+								"remove-item-from-necessities",
+								"646f9f3f8e284be4c936775b"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all necessary items",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:4000/api/item/get-all-necessary-items",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"item",
+								"get-all-necessary-items"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -1038,6 +1218,298 @@
 								"victim",
 								"upload-profile-picture",
 								"64727c8bc0bcc03829eae397"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Forgot Password",
+			"item": [
+				{
+					"name": "Check donor email",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"xyz@abc.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:4000/api/forgot-password/check-donor-email",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"forgot-password",
+								"check-donor-email"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Check vendor email",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"abc@abc.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:4000/api/forgot-password/check-vendor-email",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"forgot-password",
+								"check-vendor-email"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Check admin email",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"abc@abc.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:4000/api/forgot-password/check-admin-email",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"forgot-password",
+								"check-admin-email"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Check rider email",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"abc@abc.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:4000/api/forgot-password/check-rider-email",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"forgot-password",
+								"check-rider-email"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Send forgot password otp",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "localhost:4000/api/forgot-password/send-forgot-password-otp-email/sandybatra13@gmail.com",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"forgot-password",
+								"send-forgot-password-otp-email",
+								"sandybatra13@gmail.com"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Verify forgot password otp",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"otp_code\":\"2000\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:4000/api/forgot-password/verify-forgot-password-otp/sandybatra13@gmail.com",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"forgot-password",
+								"verify-forgot-password-otp",
+								"sandybatra13@gmail.com"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update donor password",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"password\":\"123456789\",\r\n    \"confirm_password\":\"123456789\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:4000/api/forgot-password/update-donor-pasword/xyz@abc.com",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"forgot-password",
+								"update-donor-pasword",
+								"xyz@abc.com"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update vendor password",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"password\":\"123456789\",\r\n    \"confirm_password\":\"123456789\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:4000/api/forgot-password/update-vendor-pasword/abc@abc.com",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"forgot-password",
+								"update-vendor-pasword",
+								"abc@abc.com"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update admin password",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"password\":\"123456789\",\r\n    \"confirm_password\":\"123456789\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:4000/api/forgot-password/update-admin-pasword/abc@abc.com",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"forgot-password",
+								"update-admin-pasword",
+								"abc@abc.com"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update rider  password",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"password\":\"123456789\",\r\n    \"confirm_password\":\"123456789\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:4000/api/forgot-password/update-rider-pasword/abc@abc.com",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"forgot-password",
+								"update-rider-pasword",
+								"abc@abc.com"
 							]
 						}
 					},

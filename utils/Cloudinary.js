@@ -7,7 +7,7 @@ function uploadImageToCloudinary(base64Image) {
   return new Promise((resolve, reject) => {
     // Upload the image to Cloudinary
     cloudinary.uploader.upload(
-      base64Image,
+      base64Image,  
       {
         folder: "user-profiles",
       },
