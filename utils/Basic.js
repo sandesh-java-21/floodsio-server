@@ -1,4 +1,5 @@
 const nodemailer = require("nodemailer");
+const { orderTypes, paymentTypes } = require("./StatusTypes");
 
 const generateRandomPassword = () => {
   var password = Math.floor(Math.random() * (1000000000 - 1) + 1);
@@ -54,8 +55,30 @@ function isVendorIdAvailable(arr, vendorId) {
   return false; // Vendor ID not found
 }
 
+function checkOrderType(inputString) {
+  for (const key in orderTypes) {
+    if (orderTypes[key] === inputString) {
+      return orderTypes[key];
+    }
+  }
+
+  return inputString;
+}
+
+function checkPaymentType(inputString) {
+  for (const key in paymentTypes) {
+    if (paymentTypes[key] === inputString) {
+      return paymentTypes[key];
+    }
+  }
+
+  return inputString;
+}
+
 module.exports = {
   generateRandomPassword,
   sendOTPByEmail,
   isVendorIdAvailable,
+  checkOrderType,
+  checkPaymentType,
 };

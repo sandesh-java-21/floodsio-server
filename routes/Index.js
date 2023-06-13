@@ -9,6 +9,8 @@ const itemRoutes = require("../routes/Item");
 const categoryRoutes = require("../routes/Category");
 const victimRoutes = require("../routes/Victim");
 const forgotPasswordRoutes = require("../routes/ForgotPassword");
+const orderRoutes = require("../routes/Order");
+const notificationRoutes = require("../routes/Notifications");
 
 router.use("/donor", donorRoutes);
 router.use("/vendor", vendorRoutes);
@@ -18,5 +20,7 @@ router.use("/item", itemRoutes);
 router.use("/category", categoryRoutes);
 router.use("/victim", victimRoutes);
 router.use("/forgot-password", forgotPasswordRoutes);
+router.use("/order", orderRoutes);
+router.use("/notification", notificationRoutes);
 
 module.exports = router;
