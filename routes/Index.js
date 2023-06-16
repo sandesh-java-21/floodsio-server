@@ -11,6 +11,7 @@ const victimRoutes = require("../routes/Victim");
 const forgotPasswordRoutes = require("../routes/ForgotPassword");
 const orderRoutes = require("../routes/Order");
 const notificationRoutes = require("../routes/Notifications");
+const paymentRoutes = require("../routes/Payment");
 
 router.use("/donor", donorRoutes);
 router.use("/vendor", vendorRoutes);
@@ -22,5 +23,6 @@ router.use("/victim", victimRoutes);
 router.use("/forgot-password", forgotPasswordRoutes);
 router.use("/order", orderRoutes);
 router.use("/notification", notificationRoutes);
+router.use("/payment", paymentRoutes);
 
 module.exports = router;

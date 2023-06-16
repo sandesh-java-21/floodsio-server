@@ -8,6 +8,7 @@ const {
   getOrder,
   getAllVendorOrders,
   getAllDonorOrders,
+  finishOrder,
 } = require("../controllers/Order");
 
 router.get("/get-order/:order_id", getOrder);
@@ -24,5 +25,7 @@ router.patch(
   "/update-order-payment-status/:order_id",
   updateOrderPaymentStatus
 );
+
+router.post("/:order_id/finish-order", finishOrder);
 
 module.exports = router;

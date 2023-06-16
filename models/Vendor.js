@@ -38,6 +38,7 @@ const vendorSchema = new mongoose.Schema({
     default: "",
   },
   items: [{ type: mongoose.Schema.Types.ObjectId, ref: "Item" }],
+  account: { type: mongoose.Schema.Types.ObjectId, ref: "Account" },
 });
 
 const Vendor = mongoose.model("Vendor", vendorSchema);

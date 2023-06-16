@@ -1,6 +1,8 @@
 const Vendor = require("../models/Vendor");
 const bcrypt = require("bcryptjs");
 const { uploadImageToCloudinary } = require("../utils/Cloudinary");
+const { generateAccountNumber } = require("../utils/Basic");
+const Account = require("../models/Account");
 
 const login = async (req, res) => {
   var { email_address, password } = req.body;
@@ -72,6 +74,15 @@ const signUp = async (req, res) => {
         if (err) {
           console.log(err);
         } else {
+          var account = new Account({
+            account_number: generateAccountNumber(),
+            account_holder_name: full_name,
+            current_balance: 0,
+            transactions: [],
+          });
+
+          var savedAccount = await account.save();
+
           const user = new Vendor({
             email_address: email_address,
             full_name: full_name,
@@ -79,7 +90,9 @@ const signUp = async (req, res) => {
             phone_no: phone_no,
             cnic: cnic,
             gender: gender,
+            account: savedAccount._id,
           });
+
           let savedUser = await user
             .save()
             .then((resp) => {

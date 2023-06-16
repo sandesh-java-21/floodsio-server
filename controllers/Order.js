@@ -1,7 +1,10 @@
 const Order = require("../models/Order");
 const Donor = require("../models/Donor");
 const Vendor = require("../models/Vendor");
+const Donation = require("../models/Donation");
+
 const { checkOrderType, checkPaymentType } = require("../utils/Basic");
+const { orderTypes } = require("../utils/StatusTypes");
 
 const createOrder = async (req, res) => {
   try {
@@ -309,6 +312,97 @@ const getAllDonorOrders = async (req, res) => {
   }
 };
 
+const finishOrder = async (req, res) => {
+  try {
+    var order_id = req.params.order_id;
+
+    if (!order_id || order_id === "") {
+      res.json({
+        message: "Required fields are empty!",
+        status: "400",
+      });
+    } else {
+      var order = await Order.findById(order_id)
+        .then(async (onOrderFound) => {
+          console.log("on order found: ", onOrderFound);
+
+          var donation = new Donation({
+            donor: onOrderFound.donor,
+            vendor: onOrderFound.vendor,
+            rider: null,
+            evidencePicture: "",
+            items: onOrderFound.items,
+          });
+
+          var savedDonation = await donation
+            .save()
+            .then(async (onDonationSave) => {
+              console.log("on donation save: ", onDonationSave);
+
+              var filter = {
+                _id: onOrderFound._id,
+              };
+
+              var updatedData = {
+                completed: true,
+                order_status: orderTypes.finished,
+              };
+
+              var updatedOrder = await Order.findByIdAndUpdate(
+                filter,
+                updatedData,
+                {
+                  new: true,
+                }
+              )
+                .then((onOrderComplete) => {
+                  console.log("on order complete: ", onOrderComplete);
+
+                  res.json({
+                    message: "Order finished!",
+                    status: "200",
+                    updatedOrder: onOrderComplete,
+                  });
+                })
+                .catch((onOrderCompleteError) => {
+                  console.log(
+                    "on order complete error: ",
+                    onOrderCompleteError
+                  );
+                  res.json({
+                    message: "Something went wrong while finishing the order!",
+                    status: "400",
+                    error: onOrderCompleteError,
+                  });
+                });
+            })
+            .catch((onDonationSaveError) => {
+              console.log("on donation save error: ", onDonationSaveError);
+              res.json({
+                message: "Something went wrong while saving the donation!",
+                status: "400",
+                error: onDonationSaveError,
+              });
+            });
+        })
+        .catch((onOrderFoundError) => {
+          console.log("on order found error: ", onOrderFoundError);
+          res.json({
+            message: "Order not found!",
+            status: "404",
+            error: onOrderFoundError,
+          });
+        });
+    }
+  } catch (error) {
+    res.json({
+      message: "Internal server error!",
+      status: "500",
+      error,
+    });
+  }
+};
+
 module.exports = {
   createOrder,
   updateOrderStatus,
@@ -316,4 +410,5 @@ module.exports = {
   getOrder,
   getAllVendorOrders,
   getAllDonorOrders,
+  finishOrder,
 };

@@ -75,10 +75,24 @@ function checkPaymentType(inputString) {
   return inputString;
 }
 
+function generateAccountNumber() {
+  const length = 12; // Desired length of the account number
+  const digits = "0123456789"; // Digits to choose from
+  let accountNumber = "";
+
+  for (let i = 0; i < length; i++) {
+    const randomIndex = Math.floor(Math.random() * digits.length);
+    accountNumber += digits.charAt(randomIndex);
+  }
+
+  return accountNumber;
+}
+
 module.exports = {
   generateRandomPassword,
   sendOTPByEmail,
   isVendorIdAvailable,
   checkOrderType,
   checkPaymentType,
+  generateAccountNumber,
 };
