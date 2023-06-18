@@ -26,7 +26,7 @@ const createItem = async (req, res) => {
         status: "400",
       });
     } else {
-      uploadImageToCloudinary(imageBase64)
+      uploadImageToCloudinary(imageBase64, "items")
         .then(async (onImageUpload) => {
           console.log("on image upload: ", onImageUpload);
 

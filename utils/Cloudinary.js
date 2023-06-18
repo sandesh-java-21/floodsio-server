@@ -1,15 +1,15 @@
 const cloudinary = require("cloudinary").v2;
 const { cloudConfig } = require("../Config");
 
-function uploadImageToCloudinary(base64Image) {
+function uploadImageToCloudinary(base64Image, folder = "user-profiles") {
   cloudinary.config(cloudConfig);
 
   return new Promise((resolve, reject) => {
     // Upload the image to Cloudinary
     cloudinary.uploader.upload(
-      base64Image,  
+      base64Image,
       {
-        folder: "user-profiles",
+        folder: folder,
       },
       (error, result) => {
         if (error) {

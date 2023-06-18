@@ -8,6 +8,11 @@ const donationSchema = new mongoose.Schema({
     required: true,
   },
   rider: { type: mongoose.Schema.Types.ObjectId, ref: "Rider" },
+  victim: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Victim",
+    default: null,
+  },
   completed: { type: Boolean, default: false },
   evidencePicture: { type: String },
   items: [

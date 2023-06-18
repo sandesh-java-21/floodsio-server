@@ -332,6 +332,7 @@ const finishOrder = async (req, res) => {
             rider: null,
             evidencePicture: "",
             items: onOrderFound.items,
+            victim: null,
           });
 
           var savedDonation = await donation

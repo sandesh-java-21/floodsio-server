@@ -1,4 +1,7 @@
-1. make order payment
-2. finish order
-3. donation structure is ready
-4. payment module completed
+1. assign donation for victim to rider
+2. complete donation
+3. upload donation evidence as a picture
+4. get donation populated detail
+5. get all donor donations
+
+NOTE: PROJECT IS COMPLETED FROM BACKEND NOW!

@@ -37,6 +37,11 @@ const riderSchema = new mongoose.Schema({
     required: false,
     default: "",
   },
+  current_assgined_donation: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Donation",
+    default: null,
+  },
   completedDonations: [
     { type: mongoose.Schema.Types.ObjectId, ref: "Donation" },
   ],
