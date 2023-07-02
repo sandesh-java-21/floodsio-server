@@ -73,45 +73,54 @@ const signUp = async (req, res) => {
 
     console.log("password: ", password.toString());
 
-    bcrypt.genSalt(10, function (err, salt) {
-      bcrypt.hash(password, salt, async function (err, hash) {
-        // Store hash in your password DB.
-        if (err) {
-          console.log(err);
-        } else {
-          const user = new Victim({
-            email_address: email_address,
-            full_name: full_name,
-            password: hash,
-            phone_no: phone_no,
-            cnic: cnic,
-            gender: gender,
-            address: address,
-          });
-          let savedUser = await user
-            .save()
-            .then((resp) => {
-              console.log(resp);
-              res.status(201).json({
-                status: "201",
-                message: "New Victim registered!",
-                savedVictim: resp,
-              });
-            })
-
-            .catch((error) => {
-              console.log(error);
-              var responseData = {
-                status: "422",
-                errors: error,
-              };
-              res.status(422).json(responseData);
-            });
-
-          console.log(hash);
-        }
+    // Check if the user already exists
+    const existingUser = await Victim.findOne({ email_address });
+    if (existingUser) {
+      res.status(409).json({
+        status: "409",
+        message: "User with the provided email address already exists.",
       });
-    });
+    } else {
+      bcrypt.genSalt(10, function (err, salt) {
+        bcrypt.hash(password, salt, async function (err, hash) {
+          // Store hash in your password DB.
+          if (err) {
+            console.log(err);
+          } else {
+            const user = new Victim({
+              email_address: email_address,
+              full_name: full_name,
+              password: hash,
+              phone_no: phone_no,
+              cnic: cnic,
+              gender: gender,
+              address: address,
+            });
+            let savedUser = await user
+              .save()
+              .then((resp) => {
+                console.log(resp);
+                res.status(201).json({
+                  status: "201",
+                  message: "New Victim registered!",
+                  savedVictim: resp,
+                });
+              })
+
+              .catch((error) => {
+                console.log(error);
+                var responseData = {
+                  status: "422",
+                  errors: error,
+                };
+                res.status(422).json(responseData);
+              });
+
+            console.log(hash);
+          }
+        });
+      });
+    }
   } catch (error) {
     var responseData = {
       status: "500",

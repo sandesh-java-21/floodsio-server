@@ -9,6 +9,7 @@ const {
   updateVendorById,
   uploadProfilePicture,
   getAllVendors,
+  getVendorAccount,
 } = require("../controllers/Vendor");
 
 router.post("/sign-up", signUp);
@@ -18,6 +19,8 @@ router.post("/sign-in", login);
 router.get("/get-vendor/:vendor_id", getVendorById);
 
 router.get("/get-all-vendors", getAllVendors);
+
+router.get("/get-vendor-account/:vendor_id", getVendorAccount);
 
 router.delete("/delete-vendor/:vendor_id", deleteVendorById);
 

@@ -68,55 +68,64 @@ const signUp = async (req, res) => {
     var { email_address, password, full_name, phone_no, cnic, gender } =
       req.body;
 
-    bcrypt.genSalt(10, function (err, salt) {
-      bcrypt.hash(password, salt, async function (err, hash) {
-        // Store hash in your password DB.
-        if (err) {
-          console.log(err);
-        } else {
-          var account = new Account({
-            account_number: generateAccountNumber(),
-            account_holder_name: full_name,
-            current_balance: 0,
-            transactions: [],
-          });
-
-          var savedAccount = await account.save();
-
-          const user = new Vendor({
-            email_address: email_address,
-            full_name: full_name,
-            password: hash,
-            phone_no: phone_no,
-            cnic: cnic,
-            gender: gender,
-            account: savedAccount._id,
-          });
-
-          let savedUser = await user
-            .save()
-            .then((resp) => {
-              console.log(resp);
-              res.status(201).json({
-                status: "201",
-                message: "New Vendor registered!",
-                savedVendor: resp,
-              });
-            })
-
-            .catch((error) => {
-              console.log(error);
-              var responseData = {
-                status: "422",
-                errors: error,
-              };
-              res.status(422).json(responseData);
+    // Check if the user already exists
+    const existingUser = await Vendor.findOne({ email_address });
+    if (existingUser) {
+      res.status(409).json({
+        status: "409",
+        message: "User with the provided email address already exists.",
+      });
+    } else {
+      bcrypt.genSalt(10, function (err, salt) {
+        bcrypt.hash(password, salt, async function (err, hash) {
+          // Store hash in your password DB.
+          if (err) {
+            console.log(err);
+          } else {
+            var account = new Account({
+              account_number: generateAccountNumber(),
+              account_holder_name: full_name,
+              current_balance: 0,
+              transactions: [],
             });
 
-          console.log(hash);
-        }
+            var savedAccount = await account.save();
+
+            const user = new Vendor({
+              email_address: email_address,
+              full_name: full_name,
+              password: hash,
+              phone_no: phone_no,
+              cnic: cnic,
+              gender: gender,
+              account: savedAccount._id,
+            });
+
+            let savedUser = await user
+              .save()
+              .then((resp) => {
+                console.log(resp);
+                res.status(201).json({
+                  status: "201",
+                  message: "New Vendor registered!",
+                  savedVendor: resp,
+                });
+              })
+
+              .catch((error) => {
+                console.log(error);
+                var responseData = {
+                  status: "422",
+                  errors: error,
+                };
+                res.status(422).json(responseData);
+              });
+
+            console.log(hash);
+          }
+        });
       });
-    });
+    }
   } catch (error) {
     var responseData = {
       status: "500",
@@ -410,6 +419,67 @@ const getAllVendors = async (req, res) => {
   }
 };
 
+const getVendorAccount = async (req, res) => {
+  try {
+    var vendor_id = req.params.vendor_id;
+
+    if (!vendor_id || vendor_id === "") {
+      res.json({
+        message: "Required fields are empty!",
+        status: "400",
+      });
+    } else {
+      var vendor = await Vendor.findById(vendor_id)
+        .then(async (onVendorFound) => {
+          console.log("on vendor found: ", onVendorFound);
+
+          var account_id = onVendorFound.account;
+
+          if (!account_id || account_id === "") {
+            res.json({
+              message: "Account not found!",
+              status: "404",
+            });
+          } else {
+            var account = await Account.findById(account_id)
+              .populate("transactions")
+              .then(async (onAccountFound) => {
+                console.log("on account found: ", onAccountFound);
+
+                res.json({
+                  message: "Account details found!",
+                  status: "200",
+                  account: onAccountFound,
+                });
+              })
+              .catch((onAccountFoundError) => {
+                console.log("on account found error: ", onAccountFoundError);
+                res.json({
+                  message: "Account not found!",
+                  status: "404",
+                  error: onAccountFoundError,
+                });
+              });
+          }
+        })
+        .catch((onVendorFoundError) => {
+          console.log("on vendor found error: ", onVendorFoundError);
+          res.json({
+            message: "Vendor not found!",
+            status: "404",
+            error: onVendorFoundError,
+          });
+        });
+    }
+  } catch (error) {
+    res.json({
+      status: "500",
+      message: "Internal Server Error",
+      error,
+    });
+  }
+};
+
 module.exports = {
   login,
   signUp,
@@ -418,4 +488,5 @@ module.exports = {
   updateVendorById,
   uploadProfilePicture,
   getAllVendors,
+  getVendorAccount,
 };

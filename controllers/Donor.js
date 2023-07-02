@@ -64,49 +64,111 @@ const login = async (req, res) => {
   });
 };
 
+// const signUp = async (req, res) => {
+//   try {
+//     var { email_address, password, full_name, phone_no, cnic, gender } =
+//       req.body;
+
+//     bcrypt.genSalt(10, function (err, salt) {
+//       bcrypt.hash(password, salt, async function (err, hash) {
+//         // Store hash in your password DB.
+//         if (err) {
+//           console.log(err);
+//         } else {
+//           const user = new Donor({
+//             email_address: email_address,
+//             full_name: full_name,
+//             password: hash,
+//             phone_no: phone_no,
+//             cnic: cnic,
+//             gender: gender,
+//           });
+//           let savedUser = await user
+//             .save()
+//             .then((resp) => {
+//               console.log(resp);
+//               res.status(201).json({
+//                 status: "201",
+//                 message: "New Donor registered!",
+//                 savedDonor: resp,
+//               });
+//             })
+
+//             .catch((error) => {
+//               console.log(error);
+//               var responseData = {
+//                 status: "422",
+//                 errors: error,
+//               };
+//               res.status(422).json(responseData);
+//             });
+
+//           console.log(hash);
+//         }
+//       });
+//     });
+//   } catch (error) {
+//     var responseData = {
+//       status: "500",
+//       message: "Internal Server Error",
+//       error,
+//     };
+//     res.json(responseData);
+//     console.log(error);
+//   }
+// };
+
 const signUp = async (req, res) => {
   try {
     var { email_address, password, full_name, phone_no, cnic, gender } =
       req.body;
 
-    bcrypt.genSalt(10, function (err, salt) {
-      bcrypt.hash(password, salt, async function (err, hash) {
-        // Store hash in your password DB.
-        if (err) {
-          console.log(err);
-        } else {
-          const user = new Donor({
-            email_address: email_address,
-            full_name: full_name,
-            password: hash,
-            phone_no: phone_no,
-            cnic: cnic,
-            gender: gender,
-          });
-          let savedUser = await user
-            .save()
-            .then((resp) => {
-              console.log(resp);
-              res.status(201).json({
-                status: "201",
-                message: "New Donor registered!",
-                savedDonor: resp,
-              });
-            })
-
-            .catch((error) => {
-              console.log(error);
-              var responseData = {
-                status: "422",
-                errors: error,
-              };
-              res.status(422).json(responseData);
+    // Check if the user already exists
+    const existingUser = await Donor.findOne({ email_address });
+    if (existingUser) {
+      res.status(409).json({
+        status: "409",
+        message: "User with the provided email address already exists.",
+      });
+    } else {
+      bcrypt.genSalt(10, function (err, salt) {
+        bcrypt.hash(password, salt, async function (err, hash) {
+          if (err) {
+            console.log(err);
+          } else {
+            const user = new Donor({
+              email_address: email_address,
+              full_name: full_name,
+              password: hash,
+              phone_no: phone_no,
+              cnic: cnic,
+              gender: gender,
             });
 
-          console.log(hash);
-        }
+            let savedUser = await user
+              .save()
+              .then((resp) => {
+                console.log(resp);
+                res.status(201).json({
+                  status: "201",
+                  message: "New Donor registered!",
+                  savedDonor: resp,
+                });
+              })
+              .catch((error) => {
+                console.log(error);
+                var responseData = {
+                  status: "422",
+                  errors: error,
+                };
+                res.status(422).json(responseData);
+              });
+
+            console.log(hash);
+          }
+        });
       });
-    });
+    }
   } catch (error) {
     var responseData = {
       status: "500",
