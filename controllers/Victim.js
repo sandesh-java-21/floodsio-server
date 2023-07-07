@@ -379,6 +379,35 @@ const uploadProfilePicture = async (req, res) => {
   }
 };
 
+const getAllVictims = async (req, res) => {
+  try {
+    var allVictims = await Victim.find()
+      .then((onVictimsFound) => {
+        console.log(" on victims found: ", onVictimsFound);
+
+        res.json({
+          message: "Victims found!",
+          status: "200",
+          allVictim: onVictimsFound,
+        });
+      })
+      .catch((onVictimsFoundError) => {
+        console.log(" on victim found error: ", onVictimsFoundError);
+        res.json({
+          message: "Victims not found!",
+          status: "400",
+          error: onVictimsFoundError,
+        });
+      });
+  } catch (error) {
+    res.json({
+      status: "500",
+      message: "Internal Server Error",
+      error,
+    });
+  }
+};
+
 module.exports = {
   login,
   signUp,
@@ -386,4 +415,5 @@ module.exports = {
   deleteVictimById,
   updateVictimById,
   uploadProfilePicture,
+  getAllVictims,
 };

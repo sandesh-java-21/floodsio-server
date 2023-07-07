@@ -8,11 +8,14 @@ const {
   getVictimById,
   updateVictimById,
   uploadProfilePicture,
+  getAllVictims,
 } = require("../controllers/Victim");
 
 router.post("/create-victim", signUp);
 
 // router.post("/sign-in", login);
+
+router.get("/get-all-victim", getAllVictims);
 
 router.get("/get-victim/:victim_id", getVictimById);
 
