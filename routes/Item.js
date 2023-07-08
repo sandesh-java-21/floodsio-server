@@ -11,6 +11,8 @@ const {
   addItemToNecessities,
   removeItemFromNecessities,
   getAllNecessaryItems,
+  updateItemById,
+  updateItemImage,
 } = require("../controllers/Item");
 
 router.post("/create-item", createItem);
@@ -33,5 +35,9 @@ router.patch(
   "/remove-item-from-necessities/:item_id",
   removeItemFromNecessities
 );
+
+router.put("/update-item/:item_id", updateItemById);
+
+router.patch("/update-item-image/:item_id", updateItemImage);
 
 module.exports = router;

@@ -386,6 +386,183 @@ const getAllNecessaryItems = async (req, res) => {
   }
 };
 
+const updateItemById = async (req, res) => {
+  try {
+    var item_id = req.params.item_id;
+    if (!item_id || item_id === "") {
+      res.json({
+        message: "Item id not provided!",
+        status: "400",
+      });
+    } else {
+      var { name, description, price, category, quantity } = req.body;
+
+      if (
+        !name ||
+        name === "" ||
+        !description ||
+        description === "" ||
+        !price ||
+        price <= 0 ||
+        !category ||
+        category === "" ||
+        !quantity ||
+        quantity <= 0
+      ) {
+        res.json({
+          message: "Required fields are empty!",
+          status: "400",
+        });
+      } else {
+        var item = await Item.findById(item_id)
+          .then(async (onItemFound) => {
+            console.log("on item found: ", onItemFound);
+
+            var filter = {
+              _id: onItemFound._id,
+            };
+
+            var updatedData = {
+              name,
+              description,
+              price,
+              category,
+              quantity,
+            };
+
+            var updatedItem = await Item.findByIdAndUpdate(
+              filter,
+              updatedData,
+              {
+                new: true,
+              }
+            )
+              .then((onItemUpdate) => {
+                console.log("on item update: ", onItemUpdate);
+                res.json({
+                  message: "Item updated!",
+                  status: "200",
+                  updatedItem: onItemUpdate,
+                });
+              })
+              .catch((onItemUpdateError) => {
+                console.log("on item update error: ", onItemUpdateError);
+                res.json({
+                  message: "Something went wrong while updating item!",
+                  status: "400",
+                  error: onItemUpdateError,
+                });
+              });
+          })
+          .catch((onItemFoundError) => {
+            console.log("on item found error: ", onItemFoundError);
+            res.json({
+              message: "Item not found!",
+              status: "404",
+              error: onItemFoundError,
+            });
+          });
+      }
+    }
+  } catch (error) {
+    res.json({
+      message: "Internal server error!",
+      status: "500",
+      error,
+    });
+  }
+};
+
+const updateItemImage = async (req, res) => {
+  try {
+    var item_id = req.params.item_id;
+    if (!item_id || item_id === "") {
+      res.json({
+        message: "Item id not provided!",
+        status: "400",
+      });
+    } else {
+      var { imageBase64 } = req.body;
+
+      if (!imageBase64 || imageBase64 === "") {
+        res.json({
+          message: "Required fields are empty!",
+          status: "400",
+        });
+      } else {
+        var item = await Item.findById(item_id)
+          .then(async (onItemFound) => {
+            console.log("on item found: ", onItemFound);
+
+            uploadImageToCloudinary(imageBase64, "items")
+              .then(async (onImageUpload) => {
+                console.log("on image upload: ", onImageUpload);
+
+                var filter = {
+                  _id: onItemFound._id,
+                };
+
+                var updatedData = {
+                  image: {
+                    url: onImageUpload.secure_url,
+                    public_id: onImageUpload.public_id,
+                  },
+                };
+
+                var updatedItem = await Item.findByIdAndUpdate(
+                  filter,
+                  updatedData,
+                  {
+                    new: true,
+                  }
+                )
+                  .then((onItemUpdate) => {
+                    console.log("on item update: ", onItemUpdate);
+
+                    res.json({
+                      message: "Item image updated!",
+                      status: "200",
+                      updatedItem: onItemUpdate,
+                      updatedImage: onItemUpdate.image.url,
+                    });
+                  })
+                  .catch((onItemUpdateError) => {
+                    console.log("on item update error: ", onItemUpdateError);
+                    res.json({
+                      message: "Something went wrong while updating item!",
+                      status: "400",
+                      error: onItemUpdateError,
+                    });
+                  });
+              })
+              .catch((onImageUploadError) => {
+                console.log("on image upload error: ", onImageUploadError);
+                res.json({
+                  message: "Something went wrong while uploading image!",
+                  status: "400",
+                  error: onImageUploadError,
+                });
+              });
+          })
+          .catch((onItemFoundError) => {
+            console.log("on item found error: ", onItemFoundError);
+            res.json({
+              message: "Item not found!",
+              status: "404",
+              error: onItemFoundError,
+            });
+          });
+      }
+    }
+  } catch (error) {
+    res.json({
+      message: "Internal server error!",
+      status: "500",
+      error,
+    });
+  }
+};
+
 module.exports = {
   createItem,
   getAllItems,
@@ -396,4 +573,6 @@ module.exports = {
   addItemToNecessities,
   removeItemFromNecessities,
   getAllNecessaryItems,
+  updateItemById,
+  updateItemImage,
 };
